@@ -1,0 +1,123 @@
+type ClosePosition @entity(immutable: true) {
+  id: Bytes!
+  key: Bytes! # bytes32
+  size: BigInt! # uint256
+  collateralValue: BigInt! # uint256
+  exitFundingIndex: BigInt! # uint256
+  exitPayoutIndex: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type DecreasePosition @entity(immutable: true) {
+  id: Bytes!
+  key: Bytes! # bytes32
+  size: BigInt! # uint256
+  sizeDelta: BigInt! # uint256
+  collateralReduced: BigInt! # uint256
+  fee: BigInt! # uint256
+  reserveDelta: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ExchangeSet @entity(immutable: true) {
+  id: Bytes!
+  exchange: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type FeeUsdCollected @entity(immutable: true) {
+  id: Bytes!
+  marketId: Bytes! # bytes32
+  value: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type FundingDebtPaid @entity(immutable: true) {
+  id: Bytes!
+  marketId: Bytes! # bytes32
+  account: Bytes! # address
+  value: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type FundingPayout @entity(immutable: true) {
+  id: Bytes!
+  marketId: Bytes! # bytes32
+  account: Bytes! # address
+  value: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type IncreasePosition @entity(immutable: true) {
+  id: Bytes!
+  key: Bytes! # bytes32
+  initialCollateralAmount: BigInt! # uint256
+  initialCollateralValue: BigInt! # uint256
+  fee: BigInt! # uint256
+  reserveDelta: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type MarketCreated @entity(immutable: true) {
+  id: Bytes!
+  marketType: Int! # uint8
+  marketId: Bytes! # bytes32
+  owner: Bytes! # address
+  indexToken: Bytes! # address
+  quoteToken: Bytes! # address
+  isGoverned: Boolean! # bool
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type MarketListed @entity(immutable: true) {
+  id: Bytes!
+  marketId: Bytes! # bytes32
+  isListed: Boolean! # bool
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type UpdateIndex @entity(immutable: true) {
+  id: Bytes!
+  marketId: Bytes! # bytes32
+  longFunding: BigInt! # uint256
+  shortFunding: BigInt! # uint256
+  longPayout: BigInt! # uint256
+  shortPayout: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type UpdatePosition @entity(immutable: true) {
+  id: Bytes!
+  marketId: Bytes! # bytes32
+  account: Bytes! # address
+  key: Bytes! # bytes32
+  collateralToken: Bytes! # address
+  size: BigInt! # uint256
+  collateralValue: BigInt! # uint256
+  entryPrice: BigInt! # uint256
+  entryFundingIndex: BigInt! # uint256
+  entryPayoutIndex: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

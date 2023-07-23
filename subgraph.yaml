@@ -1,0 +1,54 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: TradingEngine
+    network: mainnet
+    source:
+      address: "0xF852A9CBbf2E70DeBEeb841c4f44ffF27522c981"
+      abi: TradingEngine
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - ClosePosition
+        - DecreasePosition
+        - ExchangeSet
+        - FeeUsdCollected
+        - FundingDebtPaid
+        - FundingPayout
+        - IncreasePosition
+        - MarketCreated
+        - MarketListed
+        - UpdateIndex
+        - UpdatePosition
+      abis:
+        - name: TradingEngine
+          file: ./abis/TradingEngine.json
+      eventHandlers:
+        - event: ClosePosition(bytes32,uint256,uint256,uint256,uint256)
+          handler: handleClosePosition
+        - event: DecreasePosition(bytes32,uint256,uint256,uint256,uint256,uint256)
+          handler: handleDecreasePosition
+        - event: ExchangeSet(indexed address)
+          handler: handleExchangeSet
+        - event: FeeUsdCollected(indexed bytes32,uint256)
+          handler: handleFeeUsdCollected
+        - event: FundingDebtPaid(indexed bytes32,indexed address,uint256)
+          handler: handleFundingDebtPaid
+        - event: FundingPayout(indexed bytes32,indexed address,uint256)
+          handler: handleFundingPayout
+        - event: IncreasePosition(bytes32,uint256,uint256,uint256,uint256)
+          handler: handleIncreasePosition
+        - event: MarketCreated(indexed uint8,indexed bytes32,indexed address,address,address,bool)
+          handler: handleMarketCreated
+        - event: MarketListed(indexed bytes32,bool)
+          handler: handleMarketListed
+        - event: UpdateIndex(indexed bytes32,uint256,uint256,uint256,uint256)
+          handler: handleUpdateIndex
+        - event: UpdatePosition(indexed bytes32,indexed address,bytes32,address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleUpdatePosition
+      file: ./src/trading-engine.ts

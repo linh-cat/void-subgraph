@@ -1,0 +1,950 @@
+[
+  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+  { "inputs": [], "name": "InvalidPositionSize", "type": "error" },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "key",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "size",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "collateralValue",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "exitFundingIndex",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "exitPayoutIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "ClosePosition",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "key",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "size",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "sizeDelta",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "collateralReduced",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reserveDelta",
+        "type": "uint256"
+      }
+    ],
+    "name": "DecreasePosition",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "exchange",
+        "type": "address"
+      }
+    ],
+    "name": "ExchangeSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "marketId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "FeeUsdCollected",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "marketId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "FundingDebtPaid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "marketId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "FundingPayout",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "key",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "initialCollateralAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "initialCollateralValue",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reserveDelta",
+        "type": "uint256"
+      }
+    ],
+    "name": "IncreasePosition",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "enum MarketType",
+        "name": "marketType",
+        "type": "uint8"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "marketId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "indexToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "quoteToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isGoverned",
+        "type": "bool"
+      }
+    ],
+    "name": "MarketCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "marketId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isListed",
+        "type": "bool"
+      }
+    ],
+    "name": "MarketListed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "marketId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "longFunding",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "shortFunding",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "longPayout",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "shortPayout",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdateIndex",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "marketId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "key",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "size",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "collateralValue",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "entryPrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "entryFundingIndex",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "entryPayoutIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdatePosition",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "DEFAULT_FUNDING_INTERVAL",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          { "internalType": "address", "name": "owner", "type": "address" },
+          {
+            "internalType": "address",
+            "name": "indexToken",
+            "type": "address"
+          },
+          { "internalType": "address", "name": "vault", "type": "address" },
+          {
+            "internalType": "address",
+            "name": "quoteToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "quoteVault",
+            "type": "address"
+          },
+          { "internalType": "address", "name": "priceFeed", "type": "address" },
+          {
+            "internalType": "contract IFundingRateModel",
+            "name": "fundingRateModel",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct MarketAddresses",
+        "name": "addresses",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          { "internalType": "bytes32", "name": "name", "type": "bytes32" },
+          {
+            "internalType": "enum MarketType",
+            "name": "marketType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum PriceFeedType",
+            "name": "priceFeedType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256[2]",
+            "name": "feeDistributionWeights",
+            "type": "uint256[2]"
+          },
+          {
+            "internalType": "uint256[2]",
+            "name": "maxLongShortSkew",
+            "type": "uint256[2]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maintenanceMarginBps",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "liquidationRatio",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "liquidationFee",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxExposureMultiplier",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxPostionSizeOverExposure",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxLeverage",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "fundingInterval",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "openFee", "type": "uint256" },
+          { "internalType": "uint256", "name": "closeFee", "type": "uint256" },
+          { "internalType": "bool", "name": "isGoverned", "type": "bool" }
+        ],
+        "internalType": "struct MarketParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "addGovernedMarket",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          { "internalType": "address", "name": "owner", "type": "address" },
+          {
+            "internalType": "address",
+            "name": "indexToken",
+            "type": "address"
+          },
+          { "internalType": "address", "name": "vault", "type": "address" },
+          {
+            "internalType": "address",
+            "name": "quoteToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "quoteVault",
+            "type": "address"
+          },
+          { "internalType": "address", "name": "priceFeed", "type": "address" },
+          {
+            "internalType": "contract IFundingRateModel",
+            "name": "fundingRateModel",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct MarketAddresses",
+        "name": "addresses",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          { "internalType": "bytes32", "name": "name", "type": "bytes32" },
+          {
+            "internalType": "enum MarketType",
+            "name": "marketType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum PriceFeedType",
+            "name": "priceFeedType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256[2]",
+            "name": "feeDistributionWeights",
+            "type": "uint256[2]"
+          },
+          {
+            "internalType": "uint256[2]",
+            "name": "maxLongShortSkew",
+            "type": "uint256[2]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maintenanceMarginBps",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "liquidationRatio",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "liquidationFee",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxExposureMultiplier",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxPostionSizeOverExposure",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxLeverage",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "fundingInterval",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "openFee", "type": "uint256" },
+          { "internalType": "uint256", "name": "closeFee", "type": "uint256" },
+          { "internalType": "bool", "name": "isGoverned", "type": "bool" }
+        ],
+        "internalType": "struct MarketParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "addMarket",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          { "internalType": "bytes32", "name": "marketId", "type": "bytes32" },
+          { "internalType": "address", "name": "account", "type": "address" },
+          {
+            "internalType": "bytes32",
+            "name": "positionKey",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "collateralToken",
+            "type": "address"
+          },
+          { "internalType": "uint256", "name": "sizeDelta", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "collateralDelta",
+            "type": "uint256"
+          },
+          { "internalType": "bool", "name": "isLong", "type": "bool" }
+        ],
+        "internalType": "struct DecreasePositionParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "decreasePosition",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "exchange",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "", "type": "bytes32" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "extraCollaterals",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "marketId", "type": "bytes32" },
+      { "internalType": "bytes32", "name": "key", "type": "bytes32" }
+    ],
+    "name": "getFundingInfo",
+    "outputs": [
+      { "internalType": "uint256", "name": "fundingPayout", "type": "uint256" },
+      { "internalType": "uint256", "name": "fundingDebt", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "marketKey", "type": "bytes32" }
+    ],
+    "name": "getIndex",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "longPayout",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "shortPayout",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "longFunding",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "shortFunding",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Index",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes32", "name": "key", "type": "bytes32" }],
+    "name": "getPosition",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "bool", "name": "isLong", "type": "bool" },
+          { "internalType": "uint256", "name": "size", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "collateralValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "entryPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "entryFundingIndex",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "entryPayoutIndex",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "reserveAmount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Position",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "marketId", "type": "bytes32" },
+      {
+        "internalType": "address",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      { "internalType": "bool", "name": "open", "type": "bool" },
+      { "internalType": "uint256", "name": "sizeDelta", "type": "uint256" }
+    ],
+    "name": "getPositionFee",
+    "outputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "marketId", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" },
+      {
+        "internalType": "address",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      { "internalType": "bool", "name": "isLong", "type": "bool" }
+    ],
+    "name": "getPositionKey",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes32", "name": "key", "type": "bytes32" }],
+    "name": "getPositionSize",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "marketKey", "type": "bytes32" }
+    ],
+    "name": "getPrevFundingState",
+    "outputs": [
+      { "internalType": "uint256", "name": "timestamp", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "longOpenInterest",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "shortOpenInterest",
+        "type": "uint256"
+      },
+      { "internalType": "int256", "name": "fundingRate", "type": "int256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "marketId", "type": "bytes32" },
+      {
+        "internalType": "address",
+        "name": "collateralToken",
+        "type": "address"
+      }
+    ],
+    "name": "getVault",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gov",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          { "internalType": "bytes32", "name": "marketId", "type": "bytes32" },
+          { "internalType": "uint256", "name": "sizeDelta", "type": "uint256" },
+          { "internalType": "uint256", "name": "openFee", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "initialCollateralAmount",
+            "type": "uint256"
+          },
+          { "internalType": "address", "name": "account", "type": "address" },
+          {
+            "internalType": "address",
+            "name": "collateralToken",
+            "type": "address"
+          },
+          { "internalType": "bool", "name": "isLong", "type": "bool" }
+        ],
+        "internalType": "struct IncreasePositionParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "increasePosition",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "name": "isListed",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "name": "marketAddresses",
+    "outputs": [
+      { "internalType": "address", "name": "owner", "type": "address" },
+      { "internalType": "address", "name": "indexToken", "type": "address" },
+      { "internalType": "address", "name": "vault", "type": "address" },
+      { "internalType": "address", "name": "quoteToken", "type": "address" },
+      { "internalType": "address", "name": "quoteVault", "type": "address" },
+      { "internalType": "address", "name": "priceFeed", "type": "address" },
+      {
+        "internalType": "contract IFundingRateModel",
+        "name": "fundingRateModel",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "name": "marketParams",
+    "outputs": [
+      { "internalType": "bytes32", "name": "name", "type": "bytes32" },
+      {
+        "internalType": "enum MarketType",
+        "name": "marketType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "enum PriceFeedType",
+        "name": "priceFeedType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maintenanceMarginBps",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "liquidationRatio",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "liquidationFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxExposureMultiplier",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxPostionSizeOverExposure",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "maxLeverage", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "fundingInterval",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "openFee", "type": "uint256" },
+      { "internalType": "uint256", "name": "closeFee", "type": "uint256" },
+      { "internalType": "bool", "name": "isGoverned", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_exchange", "type": "address" }
+    ],
+    "name": "setExchange",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "vault", "type": "address" },
+      { "internalType": "uint256", "name": "delta", "type": "uint256" },
+      { "internalType": "bool", "name": "isIncrease", "type": "bool" }
+    ],
+    "name": "updateVaultBalance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "marketId", "type": "bytes32" },
+      {
+        "internalType": "address",
+        "name": "collateralToken",
+        "type": "address"
+      },
+      { "internalType": "uint256", "name": "size", "type": "uint256" }
+    ],
+    "name": "validatePositionSize",
+    "outputs": [],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
