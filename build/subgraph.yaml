@@ -6,7 +6,7 @@ dataSources:
     name: TradingEngine
     network: mainnet
     source:
-      address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"
+      address: "0x976fcd02f7C4773dd89C309fBF55D5923B4c98a1"
       abi: TradingEngine
       startBlock: 2
     mapping:
@@ -41,7 +41,7 @@ dataSources:
           handler: handleFundingDebtPaid
         - event: FundingPayout(indexed bytes32,indexed address,uint256)
           handler: handleFundingPayout
-        - event: IncreasePosition(bytes32,uint256,uint256,uint256,uint256)
+        - event: IncreasePosition(indexed bytes32,bytes32,uint256,uint256,uint256,uint256)
           handler: handleIncreasePosition
         - event: MarketCreated(indexed uint8,indexed bytes32,indexed
             address,address,address,bytes32,bool,uint8,uint8)

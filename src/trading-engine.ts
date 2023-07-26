@@ -161,7 +161,7 @@ export function handleUpdatePosition(event: UpdatePositionEvent): void {
 
   if (!position) {
     position = new Position(event.params.key);
-    position.marketId = event.params.marketId;
+    position.market = event.params.marketId;
     position.account = event.params.account;
     position.collateralToken = event.params.collateralToken;
     position.key = event.params.key;

@@ -185,10 +185,22 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "marketId",
+        "type": "bytes32"
+      },
+      {
         "indexed": false,
         "internalType": "bytes32",
         "name": "key",
         "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "sizeDelta",
+        "type": "uint256"
       },
       {
         "indexed": false,
@@ -206,12 +218,6 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "fee",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "reserveDelta",
         "type": "uint256"
       }
     ],

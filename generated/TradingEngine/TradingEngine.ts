@@ -187,24 +187,28 @@ export class IncreasePosition__Params {
     this._event = event;
   }
 
-  get key(): Bytes {
+  get marketId(): Bytes {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get initialCollateralAmount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+  get key(): Bytes {
+    return this._event.parameters[1].value.toBytes();
   }
 
-  get initialCollateralValue(): BigInt {
+  get sizeDelta(): BigInt {
     return this._event.parameters[2].value.toBigInt();
   }
 
-  get fee(): BigInt {
+  get initialCollateralAmount(): BigInt {
     return this._event.parameters[3].value.toBigInt();
   }
 
-  get reserveDelta(): BigInt {
+  get initialCollateralValue(): BigInt {
     return this._event.parameters[4].value.toBigInt();
+  }
+
+  get fee(): BigInt {
+    return this._event.parameters[5].value.toBigInt();
   }
 }
 

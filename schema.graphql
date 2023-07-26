@@ -89,7 +89,7 @@ type Market @entity {
 
 type Position @entity {
   id: Bytes!
-  marketId: Bytes! # bytes32
+  market: Market
   account: Bytes! # address
   key: Bytes! # bytes32
   collateralToken: Bytes! # address

@@ -626,13 +626,13 @@ export class IncreasePosition extends Entity {
     this.set("fee", Value.fromBigInt(value));
   }
 
-  get reserveDelta(): BigInt {
-    let value = this.get("reserveDelta");
+  get sizeDelta(): BigInt {
+    let value = this.get("sizeDelta");
     return value!.toBigInt();
   }
 
-  set reserveDelta(value: BigInt) {
-    this.set("reserveDelta", Value.fromBigInt(value));
+  set sizeDelta(value: BigInt) {
+    this.set("sizeDelta", Value.fromBigInt(value));
   }
 
   get blockNumber(): BigInt {
@@ -783,6 +783,15 @@ export class Market extends Entity {
   set transactionHash(value: Bytes) {
     this.set("transactionHash", Value.fromBytes(value));
   }
+
+  get volume(): BigInt {
+    let value = this.get("volume");
+    return value!.toBigInt();
+  }
+
+  set volume(value: BigInt) {
+    this.set("volume", Value.fromBigInt(value));
+  }
 }
 
 export class Position extends Entity {
@@ -816,13 +825,21 @@ export class Position extends Entity {
     this.set("id", Value.fromBytes(value));
   }
 
-  get marketId(): Bytes {
-    let value = this.get("marketId");
-    return value!.toBytes();
+  get market(): Bytes | null {
+    let value = this.get("market");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
   }
 
-  set marketId(value: Bytes) {
-    this.set("marketId", Value.fromBytes(value));
+  set market(value: Bytes | null) {
+    if (!value) {
+      this.unset("market");
+    } else {
+      this.set("market", Value.fromBytes(<Bytes>value));
+    }
   }
 
   get account(): Bytes {
