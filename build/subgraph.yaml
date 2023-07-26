@@ -1,6 +1,6 @@
 specVersion: 0.0.5
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: TradingEngine
@@ -27,7 +27,7 @@ dataSources:
         - UpdatePosition
       abis:
         - name: TradingEngine
-          file: ./abis/TradingEngine.json
+          file: TradingEngine/abis/TradingEngine.json
       eventHandlers:
         - event: ClosePosition(bytes32,uint256,uint256,uint256,uint256)
           handler: handleClosePosition
@@ -43,8 +43,10 @@ dataSources:
           handler: handleFundingPayout
         - event: IncreasePosition(bytes32,uint256,uint256,uint256,uint256)
           handler: handleIncreasePosition
-        - event: MarketCreated(indexed uint8,indexed bytes32,indexed address,address,address,bytes32,bool,uint8,uint8)
+        - event: MarketCreated(indexed uint8,indexed bytes32,indexed
+            address,address,address,bytes32,bool,uint8,uint8)
           handler: handleMarketCreated
-        - event: UpdatePosition(indexed bytes32,indexed address,bytes32,address,uint256,uint256,uint256,uint256,uint256)
+        - event: UpdatePosition(indexed bytes32,indexed
+            address,bytes32,address,uint256,uint256,uint256,uint256,uint256)
           handler: handleUpdatePosition
-      file: ./src/trading-engine.ts
+      file: TradingEngine/TradingEngine.wasm

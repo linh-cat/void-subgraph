@@ -7,10 +7,8 @@ import {
   FundingPayout as FundingPayoutEvent,
   IncreasePosition as IncreasePositionEvent,
   MarketCreated as MarketCreatedEvent,
-  MarketListed as MarketListedEvent,
-  UpdateIndex as UpdateIndexEvent,
-  UpdatePosition as UpdatePositionEvent
-} from "../generated/TradingEngine/TradingEngine"
+  UpdatePosition as UpdatePositionEvent,
+} from "../generated/TradingEngine/TradingEngine";
 import {
   ClosePosition,
   DecreasePosition,
@@ -19,187 +17,154 @@ import {
   FundingDebtPaid,
   FundingPayout,
   IncreasePosition,
-  MarketCreated,
-  MarketListed,
-  UpdateIndex,
-  UpdatePosition
-} from "../generated/schema"
+  Position,
+  Market,
+} from "../generated/schema";
 
 export function handleClosePosition(event: ClosePositionEvent): void {
   let entity = new ClosePosition(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.key = event.params.key
-  entity.size = event.params.size
-  entity.collateralValue = event.params.collateralValue
-  entity.exitFundingIndex = event.params.exitFundingIndex
-  entity.exitPayoutIndex = event.params.exitPayoutIndex
+  );
+  entity.key = event.params.key;
+  entity.size = event.params.size;
+  entity.collateralValue = event.params.collateralValue;
+  entity.exitFundingIndex = event.params.exitFundingIndex;
+  entity.exitPayoutIndex = event.params.exitPayoutIndex;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
 
-  entity.save()
+  entity.save();
 }
 
 export function handleDecreasePosition(event: DecreasePositionEvent): void {
   let entity = new DecreasePosition(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.key = event.params.key
-  entity.size = event.params.size
-  entity.sizeDelta = event.params.sizeDelta
-  entity.collateralReduced = event.params.collateralReduced
-  entity.fee = event.params.fee
-  entity.reserveDelta = event.params.reserveDelta
+  );
+  entity.key = event.params.key;
+  entity.size = event.params.size;
+  entity.sizeDelta = event.params.sizeDelta;
+  entity.collateralReduced = event.params.collateralReduced;
+  entity.fee = event.params.fee;
+  entity.reserveDelta = event.params.reserveDelta;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
 
-  entity.save()
+  entity.save();
 }
 
 export function handleExchangeSet(event: ExchangeSetEvent): void {
   let entity = new ExchangeSet(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.exchange = event.params.exchange
+  );
+  entity.exchange = event.params.exchange;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
 
-  entity.save()
+  entity.save();
 }
 
 export function handleFeeUsdCollected(event: FeeUsdCollectedEvent): void {
   let entity = new FeeUsdCollected(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.marketId = event.params.marketId
-  entity.value = event.params.value
+  );
+  entity.marketId = event.params.marketId;
+  entity.value = event.params.value;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
 
-  entity.save()
+  entity.save();
 }
 
 export function handleFundingDebtPaid(event: FundingDebtPaidEvent): void {
   let entity = new FundingDebtPaid(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.marketId = event.params.marketId
-  entity.account = event.params.account
-  entity.value = event.params.value
+  );
+  entity.marketId = event.params.marketId;
+  entity.account = event.params.account;
+  entity.value = event.params.value;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
 
-  entity.save()
+  entity.save();
 }
 
 export function handleFundingPayout(event: FundingPayoutEvent): void {
   let entity = new FundingPayout(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.marketId = event.params.marketId
-  entity.account = event.params.account
-  entity.value = event.params.value
+  );
+  entity.marketId = event.params.marketId;
+  entity.account = event.params.account;
+  entity.value = event.params.value;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
 
-  entity.save()
+  entity.save();
 }
 
 export function handleIncreasePosition(event: IncreasePositionEvent): void {
   let entity = new IncreasePosition(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.key = event.params.key
-  entity.initialCollateralAmount = event.params.initialCollateralAmount
-  entity.initialCollateralValue = event.params.initialCollateralValue
-  entity.fee = event.params.fee
-  entity.reserveDelta = event.params.reserveDelta
+  );
+  entity.key = event.params.key;
+  entity.initialCollateralAmount = event.params.initialCollateralAmount;
+  entity.initialCollateralValue = event.params.initialCollateralValue;
+  entity.fee = event.params.fee;
+  entity.reserveDelta = event.params.reserveDelta;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
 
-  entity.save()
+  entity.save();
 }
 
 export function handleMarketCreated(event: MarketCreatedEvent): void {
-  let entity = new MarketCreated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.marketType = event.params.marketType
-  entity.marketId = event.params.marketId
-  entity.owner = event.params.owner
-  entity.indexToken = event.params.indexToken
-  entity.quoteToken = event.params.quoteToken
-  entity.isGoverned = event.params.isGoverned
+  let id = event.params.marketId;
+  let entity = Market.load(event.params.marketId);
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  entity = new Market(event.params.marketId);
+  entity.marketType = event.params.marketType;
+  entity.marketId = event.params.marketId;
+  entity.owner = event.params.owner;
+  entity.indexToken = event.params.indexToken;
+  entity.quoteToken = event.params.quoteToken;
+  entity.isGoverned = event.params.isGoverned;
+  entity.transactionHash = event.transaction.hash;
+  entity.category = event.params.category;
+  entity.maxLeverage = event.params.maxLeverage;
+  entity.name = event.params.name.toString();
 
-  entity.save()
-}
-
-export function handleMarketListed(event: MarketListedEvent): void {
-  let entity = new MarketListed(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.marketId = event.params.marketId
-  entity.isListed = event.params.isListed
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleUpdateIndex(event: UpdateIndexEvent): void {
-  let entity = new UpdateIndex(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.marketId = event.params.marketId
-  entity.longFunding = event.params.longFunding
-  entity.shortFunding = event.params.shortFunding
-  entity.longPayout = event.params.longPayout
-  entity.shortPayout = event.params.shortPayout
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  entity.save();
 }
 
 export function handleUpdatePosition(event: UpdatePositionEvent): void {
-  let entity = new UpdatePosition(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.marketId = event.params.marketId
-  entity.account = event.params.account
-  entity.key = event.params.key
-  entity.collateralToken = event.params.collateralToken
-  entity.size = event.params.size
-  entity.collateralValue = event.params.collateralValue
-  entity.entryPrice = event.params.entryPrice
-  entity.entryFundingIndex = event.params.entryFundingIndex
-  entity.entryPayoutIndex = event.params.entryPayoutIndex
+  let position = Position.load(event.params.key);
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  if (!position) {
+    position = new Position(event.params.key);
+    position.marketId = event.params.marketId;
+    position.account = event.params.account;
+    position.collateralToken = event.params.collateralToken;
+    position.key = event.params.key;
+  }
 
-  entity.save()
+  position.size = event.params.size;
+  position.collateralValue = event.params.collateralValue;
+  position.entryPrice = event.params.entryPrice;
+
+  position.entryFundingIndex = event.params.entryFundingIndex;
+  position.entryPayoutIndex = event.params.entryPayoutIndex;
+  position.save();
 }
