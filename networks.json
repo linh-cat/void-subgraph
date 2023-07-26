@@ -3,6 +3,9 @@
     "TradingEngine": {
       "address": "0xF852A9CBbf2E70DeBEeb841c4f44ffF27522c981",
       "startBlock": 0
+    },
+    "Exchange": {
+      "address": "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c"
     }
   }
 }
