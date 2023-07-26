@@ -1,3 +1,4 @@
+import { BigInt } from "@graphprotocol/graph-ts";
 import {
   ClosePosition as ClosePositionEvent,
   DecreasePosition as DecreasePositionEvent,
@@ -121,19 +122,24 @@ export function handleIncreasePosition(event: IncreasePositionEvent): void {
   entity.initialCollateralAmount = event.params.initialCollateralAmount;
   entity.initialCollateralValue = event.params.initialCollateralValue;
   entity.fee = event.params.fee;
-  entity.reserveDelta = event.params.reserveDelta;
+  entity.sizeDelta = event.params.sizeDelta;
 
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  let market = Market.load(event.params.marketId);
+
+  if (market) {
+    market.volume = market.volume.plus(event.params.sizeDelta);
+    market.save();
+  }
 }
 
 export function handleMarketCreated(event: MarketCreatedEvent): void {
-  let id = event.params.marketId;
   let entity = Market.load(event.params.marketId);
-
   entity = new Market(event.params.marketId);
   entity.marketType = event.params.marketType;
   entity.marketId = event.params.marketId;
@@ -145,6 +151,7 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
   entity.category = event.params.category;
   entity.maxLeverage = event.params.maxLeverage;
   entity.name = event.params.name.toString();
+  entity.volume = BigInt.fromI32(0);
 
   entity.save();
 }
