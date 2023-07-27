@@ -7,14 +7,12 @@ import {
   OrderPlaced as OrderPlacedEvent,
   Exchange,
   Exchange__getOrderResultValue0Struct,
-  Exchange__getOrderResultValue0ExtraStruct,
 } from "../generated/Exchange/Exchange";
 import {
   CloseMarketOrderPlaced,
   OpenMarketOrderPlaced,
   OrderCancelled,
   OrderExecuted,
-  OrderPlaced,
   Order,
 } from "../generated/schema";
 
@@ -99,9 +97,13 @@ export function handleOrderPlaced(event: OrderPlacedEvent): void {
   entity.triggerPrice = order.extra.triggerPrice;
   entity.tpPrice = order.extra.tpPrice;
   entity.slPrice = order.extra.slPrice;
+  entity.isLong = order.isLong;
   entity.collateralToken = order.collateralToken;
   entity.collateralAmount = order.collateralAmount;
   entity.executed = false;
   entity.cancelled = false;
+  entity.blockNumber = event.block.number;
+  entity.createdAt = event.block.timestamp;
+  entity.txHash = event.transaction.hash;
   entity.save();
 }

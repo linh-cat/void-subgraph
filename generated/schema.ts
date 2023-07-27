@@ -913,6 +913,15 @@ export class Position extends Entity {
   set entryPayoutIndex(value: BigInt) {
     this.set("entryPayoutIndex", Value.fromBigInt(value));
   }
+
+  get createdAt(): BigInt {
+    let value = this.get("createdAt");
+    return value!.toBigInt();
+  }
+
+  set createdAt(value: BigInt) {
+    this.set("createdAt", Value.fromBigInt(value));
+  }
 }
 
 export class CloseMarketOrderPlaced extends Entity {
@@ -1330,6 +1339,15 @@ export class Order extends Entity {
     this.set("slPrice", Value.fromBigInt(value));
   }
 
+  get isLong(): boolean {
+    let value = this.get("isLong");
+    return value!.toBoolean();
+  }
+
+  set isLong(value: boolean) {
+    this.set("isLong", Value.fromBoolean(value));
+  }
+
   get collateralAmount(): BigInt {
     let value = this.get("collateralAmount");
     return value!.toBigInt();
@@ -1365,57 +1383,81 @@ export class Order extends Entity {
   set cancelled(value: boolean) {
     this.set("cancelled", Value.fromBoolean(value));
   }
+
+  get blockNumber(): BigInt {
+    let value = this.get("blockNumber");
+    return value!.toBigInt();
+  }
+
+  set blockNumber(value: BigInt) {
+    this.set("blockNumber", Value.fromBigInt(value));
+  }
+
+  get createdAt(): BigInt {
+    let value = this.get("createdAt");
+    return value!.toBigInt();
+  }
+
+  set createdAt(value: BigInt) {
+    this.set("createdAt", Value.fromBigInt(value));
+  }
+
+  get txHash(): Bytes {
+    let value = this.get("txHash");
+    return value!.toBytes();
+  }
+
+  set txHash(value: Bytes) {
+    this.set("txHash", Value.fromBytes(value));
+  }
 }
 
-export class OrderPlaced extends Entity {
-  constructor(id: Bytes) {
+export class History extends Entity {
+  constructor(id: string) {
     super();
-    this.set("id", Value.fromBytes(id));
+    this.set("id", Value.fromString(id));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save OrderPlaced entity without an ID");
+    assert(id != null, "Cannot save History entity without an ID");
     if (id) {
       assert(
-        id.kind == ValueKind.BYTES,
-        `Entities of type OrderPlaced must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        id.kind == ValueKind.STRING,
+        `Entities of type History must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("OrderPlaced", id.toBytes().toHexString(), this);
+      store.set("History", id.toString(), this);
     }
   }
 
-  static load(id: Bytes): OrderPlaced | null {
-    return changetype<OrderPlaced | null>(
-      store.get("OrderPlaced", id.toHexString())
-    );
+  static load(id: string): History | null {
+    return changetype<History | null>(store.get("History", id));
   }
 
-  get id(): Bytes {
+  get id(): string {
     let value = this.get("id");
-    return value!.toBytes();
+    return value!.toString();
   }
 
-  set id(value: Bytes) {
-    this.set("id", Value.fromBytes(value));
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
   }
 
-  get marketId(): Bytes {
-    let value = this.get("marketId");
-    return value!.toBytes();
+  get market(): Bytes | null {
+    let value = this.get("market");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
   }
 
-  set marketId(value: Bytes) {
-    this.set("marketId", Value.fromBytes(value));
-  }
-
-  get orderType(): i32 {
-    let value = this.get("orderType");
-    return value!.toI32();
-  }
-
-  set orderType(value: i32) {
-    this.set("orderType", Value.fromI32(value));
+  set market(value: Bytes | null) {
+    if (!value) {
+      this.unset("market");
+    } else {
+      this.set("market", Value.fromBytes(<Bytes>value));
+    }
   }
 
   get account(): Bytes {
@@ -1427,39 +1469,127 @@ export class OrderPlaced extends Entity {
     this.set("account", Value.fromBytes(value));
   }
 
-  get orderId(): BigInt {
-    let value = this.get("orderId");
-    return value!.toBigInt();
+  get status(): string {
+    let value = this.get("status");
+    return value!.toString();
   }
 
-  set orderId(value: BigInt) {
-    this.set("orderId", Value.fromBigInt(value));
+  set status(value: string) {
+    this.set("status", Value.fromString(value));
   }
 
-  get blockNumber(): BigInt {
-    let value = this.get("blockNumber");
-    return value!.toBigInt();
+  get isLong(): boolean {
+    let value = this.get("isLong");
+    return value!.toBoolean();
   }
 
-  set blockNumber(value: BigInt) {
-    this.set("blockNumber", Value.fromBigInt(value));
+  set isLong(value: boolean) {
+    this.set("isLong", Value.fromBoolean(value));
   }
 
-  get blockTimestamp(): BigInt {
-    let value = this.get("blockTimestamp");
-    return value!.toBigInt();
-  }
-
-  set blockTimestamp(value: BigInt) {
-    this.set("blockTimestamp", Value.fromBigInt(value));
-  }
-
-  get transactionHash(): Bytes {
-    let value = this.get("transactionHash");
+  get collateralToken(): Bytes {
+    let value = this.get("collateralToken");
     return value!.toBytes();
   }
 
-  set transactionHash(value: Bytes) {
-    this.set("transactionHash", Value.fromBytes(value));
+  set collateralToken(value: Bytes) {
+    this.set("collateralToken", Value.fromBytes(value));
+  }
+
+  get collateralAmount(): BigInt {
+    let value = this.get("collateralAmount");
+    return value!.toBigInt();
+  }
+
+  set collateralAmount(value: BigInt) {
+    this.set("collateralAmount", Value.fromBigInt(value));
+  }
+
+  get collateralValue(): BigInt | null {
+    let value = this.get("collateralValue");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set collateralValue(value: BigInt | null) {
+    if (!value) {
+      this.unset("collateralValue");
+    } else {
+      this.set("collateralValue", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get executedPrice(): BigInt {
+    let value = this.get("executedPrice");
+    return value!.toBigInt();
+  }
+
+  set executedPrice(value: BigInt) {
+    this.set("executedPrice", Value.fromBigInt(value));
+  }
+
+  get liquidatedPrice(): BigInt | null {
+    let value = this.get("liquidatedPrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set liquidatedPrice(value: BigInt | null) {
+    if (!value) {
+      this.unset("liquidatedPrice");
+    } else {
+      this.set("liquidatedPrice", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get pnl(): BigInt {
+    let value = this.get("pnl");
+    return value!.toBigInt();
+  }
+
+  set pnl(value: BigInt) {
+    this.set("pnl", Value.fromBigInt(value));
+  }
+
+  get feeUsd(): BigInt {
+    let value = this.get("feeUsd");
+    return value!.toBigInt();
+  }
+
+  set feeUsd(value: BigInt) {
+    this.set("feeUsd", Value.fromBigInt(value));
+  }
+
+  get fundingPayout(): BigInt {
+    let value = this.get("fundingPayout");
+    return value!.toBigInt();
+  }
+
+  set fundingPayout(value: BigInt) {
+    this.set("fundingPayout", Value.fromBigInt(value));
+  }
+
+  get fundingDebt(): BigInt {
+    let value = this.get("fundingDebt");
+    return value!.toBigInt();
+  }
+
+  set fundingDebt(value: BigInt) {
+    this.set("fundingDebt", Value.fromBigInt(value));
+  }
+
+  get txHash(): Bytes {
+    let value = this.get("txHash");
+    return value!.toBytes();
+  }
+
+  set txHash(value: Bytes) {
+    this.set("txHash", Value.fromBytes(value));
   }
 }

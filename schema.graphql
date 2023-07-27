@@ -98,6 +98,7 @@ type Position @entity {
   entryPrice: BigInt! # uint256
   entryFundingIndex: BigInt! # uint256
   entryPayoutIndex: BigInt! # uint256
+  createdAt: BigInt!
 }
 
 type CloseMarketOrderPlaced @entity(immutable: true) {
@@ -144,19 +145,36 @@ type Order @entity {
   triggerPrice: BigInt!
   tpPrice: BigInt!
   slPrice: BigInt!
+  isLong: Boolean! # bool
   collateralAmount: BigInt! # uint256
   collateralToken: Bytes! # address
   executed: Boolean! # bool
   cancelled: Boolean! # bool
+  blockNumber: BigInt!
+  createdAt: BigInt!
+  txHash: Bytes!
 }
 
-type OrderPlaced @entity(immutable: true) {
-  id: Bytes!
-  marketId: Bytes! # bytes32
-  orderType: Int! # uint8
+enum PositionStatus {
+  OPEN
+  CLOSED
+  LIQUIDATED
+}
+
+type History @entity {
+  id: ID!
+  market: Market
   account: Bytes! # address
-  orderId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+  status: PositionStatus!
+  isLong: Boolean! # bool
+  collateralToken: Bytes! # address
+  collateralAmount: BigInt!
+  collateralValue: BigInt
+  executedPrice: BigInt!
+  liquidatedPrice: BigInt
+  pnl: BigInt
+  feeUsd: BigInt!
+  fundingPayout: BigInt! # usd
+  fundingDebt: BigInt! # usd
+  txHash: Bytes!
 }

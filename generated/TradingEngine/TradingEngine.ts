@@ -100,16 +100,16 @@ export class ExchangeSet__Params {
   }
 }
 
-export class FeeUsdCollected extends ethereum.Event {
-  get params(): FeeUsdCollected__Params {
-    return new FeeUsdCollected__Params(this);
+export class FeeAndFundings extends ethereum.Event {
+  get params(): FeeAndFundings__Params {
+    return new FeeAndFundings__Params(this);
   }
 }
 
-export class FeeUsdCollected__Params {
-  _event: FeeUsdCollected;
+export class FeeAndFundings__Params {
+  _event: FeeAndFundings;
 
-  constructor(event: FeeUsdCollected) {
+  constructor(event: FeeAndFundings) {
     this._event = event;
   }
 
@@ -117,8 +117,20 @@ export class FeeUsdCollected__Params {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get value(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+  get key(): Bytes {
+    return this._event.parameters[1].value.toBytes();
+  }
+
+  get fee(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get fundingDebt(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
+
+  get fundingPayout(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
   }
 }
 
@@ -191,24 +203,80 @@ export class IncreasePosition__Params {
     return this._event.parameters[0].value.toBytes();
   }
 
+  get account(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
   get key(): Bytes {
-    return this._event.parameters[1].value.toBytes();
-  }
-
-  get sizeDelta(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-
-  get initialCollateralAmount(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+    return this._event.parameters[2].value.toBytes();
   }
 
   get initialCollateralValue(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
+
+  get feeUsd(): BigInt {
     return this._event.parameters[4].value.toBigInt();
   }
 
-  get fee(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
+  get params(): IncreasePositionParamsStruct {
+    return changetype<IncreasePositionParamsStruct>(
+      this._event.parameters[5].value.toTuple()
+    );
+  }
+
+  get result(): IncreasePositionResultStruct {
+    return changetype<IncreasePositionResultStruct>(
+      this._event.parameters[6].value.toTuple()
+    );
+  }
+}
+
+export class IncreasePositionParamsStruct extends ethereum.Tuple {
+  get marketId(): Bytes {
+    return this[0].toBytes();
+  }
+
+  get sizeDelta(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get openFee(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get initialCollateralAmount(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get account(): Address {
+    return this[4].toAddress();
+  }
+
+  get collateralToken(): Address {
+    return this[5].toAddress();
+  }
+
+  get isLong(): boolean {
+    return this[6].toBoolean();
+  }
+}
+
+export class IncreasePositionResultStruct extends ethereum.Tuple {
+  get fundingPayout(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get fundingDebt(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get collateralValueDelta(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get executedPrice(): BigInt {
+    return this[3].toBigInt();
   }
 }
 

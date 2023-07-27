@@ -35,13 +35,13 @@ dataSources:
           handler: handleDecreasePosition
         - event: ExchangeSet(indexed address)
           handler: handleExchangeSet
-        - event: FeeUsdCollected(indexed bytes32,uint256)
-          handler: handleFeeUsdCollected
+        # - event: FeeAndFundings(indexed bytes32,indexed bytes32,uin256,uint256,uint256)
+        #   handler: handleFeeUsdCollected
         - event: FundingDebtPaid(indexed bytes32,indexed address,uint256)
           handler: handleFundingDebtPaid
         - event: FundingPayout(indexed bytes32,indexed address,uint256)
           handler: handleFundingPayout
-        - event: IncreasePosition(indexed bytes32,bytes32,uint256,uint256,uint256,uint256)
+        - event: IncreasePosition(indexed bytes32,indexed address,bytes32,uint256,uint256,(bytes32,uint256,uint256,uint256,address,address,bool),(uint256,uint256,uint256,uint256))
           handler: handleIncreasePosition
         - event: MarketCreated(indexed uint8,indexed bytes32,indexed
             address,address,address,bytes32,bool,uint8,uint8)

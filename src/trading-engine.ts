@@ -3,7 +3,7 @@ import {
   ClosePosition as ClosePositionEvent,
   DecreasePosition as DecreasePositionEvent,
   ExchangeSet as ExchangeSetEvent,
-  FeeUsdCollected as FeeUsdCollectedEvent,
+  // FeeUsdCollected as FeeUsdCollectedEvent,
   FundingDebtPaid as FundingDebtPaidEvent,
   FundingPayout as FundingPayoutEvent,
   IncreasePosition as IncreasePositionEvent,
@@ -14,12 +14,12 @@ import {
   ClosePosition,
   DecreasePosition,
   ExchangeSet,
-  FeeUsdCollected,
   FundingDebtPaid,
   FundingPayout,
   IncreasePosition,
   Position,
   Market,
+  History,
 } from "../generated/schema";
 
 export function handleClosePosition(event: ClosePositionEvent): void {
@@ -70,19 +70,19 @@ export function handleExchangeSet(event: ExchangeSetEvent): void {
   entity.save();
 }
 
-export function handleFeeUsdCollected(event: FeeUsdCollectedEvent): void {
-  let entity = new FeeUsdCollected(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.marketId = event.params.marketId;
-  entity.value = event.params.value;
+// export function handleFeeAndFundings(event: FeeUsdCollectedEvent): void {
+//   let entity = new FeeUsdCollected(
+//     event.transaction.hash.concatI32(event.logIndex.toI32())
+//   );
+//   entity.marketId = event.params.marketId;
+//   entity.value = event.params.value;
 
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
+//   entity.blockNumber = event.block.number;
+//   entity.blockTimestamp = event.block.timestamp;
+//   entity.transactionHash = event.transaction.hash;
 
-  entity.save();
-}
+//   entity.save();
+// }
 
 export function handleFundingDebtPaid(event: FundingDebtPaidEvent): void {
   let entity = new FundingDebtPaid(
@@ -114,15 +114,37 @@ export function handleFundingPayout(event: FundingPayoutEvent): void {
   entity.save();
 }
 
+function saveHistoryOnIncrease(event: IncreasePositionEvent): void {
+  let history = new History(
+    `${event.params.key.toHex()}-${event.block.timestamp}`
+  );
+
+  history.account = event.params.params.account;
+  history.market = event.params.params.marketId;
+  // history.status
+  history.isLong = event.params.params.isLong;
+  history.collateralToken = event.params.params.collateralToken;
+  history.collateralAmount = event.params.params.initialCollateralAmount;
+  history.collateralValue = event.params.initialCollateralValue;
+  history.executedPrice = event.params.result.executedPrice;
+  history.status = "OPEN";
+  history.feeUsd = event.params.feeUsd;
+  history.fundingDebt = event.params.result.fundingDebt;
+  history.fundingPayout = event.params.result.fundingPayout;
+  history.txHash = event.transaction.hash;
+
+  history.save();
+}
+
 export function handleIncreasePosition(event: IncreasePositionEvent): void {
   let entity = new IncreasePosition(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.key = event.params.key;
-  entity.initialCollateralAmount = event.params.initialCollateralAmount;
+  entity.initialCollateralAmount = event.params.params.initialCollateralAmount;
   entity.initialCollateralValue = event.params.initialCollateralValue;
-  entity.fee = event.params.fee;
-  entity.sizeDelta = event.params.sizeDelta;
+  entity.fee = event.params.feeUsd;
+  entity.sizeDelta = event.params.params.sizeDelta;
 
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
@@ -130,10 +152,12 @@ export function handleIncreasePosition(event: IncreasePositionEvent): void {
 
   entity.save();
 
+  saveHistoryOnIncrease(event);
+
   let market = Market.load(event.params.marketId);
 
   if (market) {
-    market.volume = market.volume.plus(event.params.sizeDelta);
+    market.volume = market.volume.plus(event.params.params.sizeDelta);
     market.save();
   }
 }
@@ -167,6 +191,7 @@ export function handleUpdatePosition(event: UpdatePositionEvent): void {
     position.key = event.params.key;
   }
 
+  position.createdAt = event.block.timestamp;
   position.size = event.params.size;
   position.collateralValue = event.params.collateralValue;
   position.entryPrice = event.params.entryPrice;

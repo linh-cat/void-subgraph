@@ -122,13 +122,31 @@
         "type": "bytes32"
       },
       {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "key",
+        "type": "bytes32"
+      },
+      {
         "indexed": false,
         "internalType": "uint256",
-        "name": "value",
+        "name": "fee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fundingDebt",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fundingPayout",
         "type": "uint256"
       }
     ],
-    "name": "FeeUsdCollected",
+    "name": "FeeAndFundings",
     "type": "event"
   },
   {
@@ -191,22 +209,16 @@
         "type": "bytes32"
       },
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
         "indexed": false,
         "internalType": "bytes32",
         "name": "key",
         "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "sizeDelta",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "initialCollateralAmount",
-        "type": "uint256"
       },
       {
         "indexed": false,
@@ -217,8 +229,79 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "fee",
+        "name": "feeUsd",
         "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "marketId",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "sizeDelta",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "openFee",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "initialCollateralAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "collateralToken",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "isLong",
+            "type": "bool"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IncreasePositionParams",
+        "name": "params",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "fundingPayout",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "fundingDebt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collateralValueDelta",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "executedPrice",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IncreasePositionResult",
+        "name": "result",
+        "type": "tuple"
       }
     ],
     "name": "IncreasePosition",
