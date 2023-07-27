@@ -98,7 +98,7 @@ type Position @entity {
   entryPrice: BigInt! # uint256
   entryFundingIndex: BigInt! # uint256
   entryPayoutIndex: BigInt! # uint256
-  createdAt: BigInt!
+  createdAt: BigInt
 }
 
 type CloseMarketOrderPlaced @entity(immutable: true) {
@@ -170,6 +170,7 @@ type History @entity {
   collateralToken: Bytes! # address
   collateralAmount: BigInt!
   collateralValue: BigInt
+  sizeDelta: BigInt!
   executedPrice: BigInt!
   liquidatedPrice: BigInt
   pnl: BigInt
@@ -177,4 +178,7 @@ type History @entity {
   fundingPayout: BigInt! # usd
   fundingDebt: BigInt! # usd
   txHash: Bytes!
+
+  # close
+  collateralReduced: BigInt
 }

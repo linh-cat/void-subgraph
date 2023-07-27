@@ -40,21 +40,7 @@ export function handleClosePosition(event: ClosePositionEvent): void {
 }
 
 export function handleDecreasePosition(event: DecreasePositionEvent): void {
-  let entity = new DecreasePosition(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.key = event.params.key;
-  entity.size = event.params.size;
-  entity.sizeDelta = event.params.sizeDelta;
-  entity.collateralReduced = event.params.collateralReduced;
-  entity.fee = event.params.fee;
-  entity.reserveDelta = event.params.reserveDelta;
-
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-
-  entity.save();
+  saveHistoryOnDecrease(event);
 }
 
 export function handleExchangeSet(event: ExchangeSetEvent): void {
@@ -132,26 +118,60 @@ function saveHistoryOnIncrease(event: IncreasePositionEvent): void {
   history.fundingDebt = event.params.result.fundingDebt;
   history.fundingPayout = event.params.result.fundingPayout;
   history.txHash = event.transaction.hash;
+  history.sizeDelta = event.params.params.sizeDelta;
+  history.save();
+}
+
+function saveHistoryOnDecrease(event: DecreasePositionEvent): void {
+  let history = new History(
+    `${event.params.key.toHex()}-${event.block.timestamp}`
+  );
+
+  history.account = event.params.params.account;
+  history.market = event.params.params.marketId;
+  // history.status
+  history.isLong = event.params.params.isLong;
+  history.collateralToken = event.params.params.collateralToken;
+  history.collateralAmount = event.params.result.collateralAmountReduced;
+  history.collateralValue = event.params.result.collateralReduced;
+  history.executedPrice = event.params.result.executedPrice;
+  history.status = "CLOSED";
+  history.feeUsd = event.params.result.totalFee;
+  history.fundingDebt = event.params.result.fundingDebt;
+  history.fundingPayout = event.params.result.fundingPayout;
+  history.txHash = event.transaction.hash;
+  history.sizeDelta = event.params.params.sizeDelta;
+  history.collateralReduced = event.params.result.collateralReduced;
+
+  let payoutValue: BigInt = event.params.result.payoutValue;
+
+  let pnl: BigInt = event.params.result.realizedPnl
+    .minus(event.params.result.totalFee)
+    .plus(event.params.result.fundingPayout)
+    .minus(event.params.result.fundingDebt);
+
+  // payoutValue == 0 could be a loss
+  if (payoutValue == BigInt.zero()) {
+    if (pnl < BigInt.fromI32(0)) {
+      // loss pnl is capped by collateralReduced
+      history.pnl =
+        pnl.abs() > event.params.result.collateralReduced
+          ? BigInt.zero().minus(event.params.result.collateralReduced) // reverse sign
+          : pnl;
+    } else {
+      history.pnl = pnl;
+    }
+  } else {
+    history.pnl =
+      payoutValue < event.params.result.collateralReduced
+        ? BigInt.zero()
+        : payoutValue.minus(event.params.result.collateralReduced);
+  }
 
   history.save();
 }
 
 export function handleIncreasePosition(event: IncreasePositionEvent): void {
-  let entity = new IncreasePosition(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.key = event.params.key;
-  entity.initialCollateralAmount = event.params.params.initialCollateralAmount;
-  entity.initialCollateralValue = event.params.initialCollateralValue;
-  entity.fee = event.params.feeUsd;
-  entity.sizeDelta = event.params.params.sizeDelta;
-
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-
-  entity.save();
-
   saveHistoryOnIncrease(event);
 
   let market = Market.load(event.params.marketId);

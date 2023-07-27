@@ -914,13 +914,21 @@ export class Position extends Entity {
     this.set("entryPayoutIndex", Value.fromBigInt(value));
   }
 
-  get createdAt(): BigInt {
+  get createdAt(): BigInt | null {
     let value = this.get("createdAt");
-    return value!.toBigInt();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set createdAt(value: BigInt) {
-    this.set("createdAt", Value.fromBigInt(value));
+  set createdAt(value: BigInt | null) {
+    if (!value) {
+      this.unset("createdAt");
+    } else {
+      this.set("createdAt", Value.fromBigInt(<BigInt>value));
+    }
   }
 }
 
@@ -1522,6 +1530,15 @@ export class History extends Entity {
     }
   }
 
+  get sizeDelta(): BigInt {
+    let value = this.get("sizeDelta");
+    return value!.toBigInt();
+  }
+
+  set sizeDelta(value: BigInt) {
+    this.set("sizeDelta", Value.fromBigInt(value));
+  }
+
   get executedPrice(): BigInt {
     let value = this.get("executedPrice");
     return value!.toBigInt();
@@ -1548,13 +1565,21 @@ export class History extends Entity {
     }
   }
 
-  get pnl(): BigInt {
+  get pnl(): BigInt | null {
     let value = this.get("pnl");
-    return value!.toBigInt();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set pnl(value: BigInt) {
-    this.set("pnl", Value.fromBigInt(value));
+  set pnl(value: BigInt | null) {
+    if (!value) {
+      this.unset("pnl");
+    } else {
+      this.set("pnl", Value.fromBigInt(<BigInt>value));
+    }
   }
 
   get feeUsd(): BigInt {
@@ -1591,5 +1616,22 @@ export class History extends Entity {
 
   set txHash(value: Bytes) {
     this.set("txHash", Value.fromBytes(value));
+  }
+
+  get collateralReduced(): BigInt | null {
+    let value = this.get("collateralReduced");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set collateralReduced(value: BigInt | null) {
+    if (!value) {
+      this.unset("collateralReduced");
+    } else {
+      this.set("collateralReduced", Value.fromBigInt(<BigInt>value));
+    }
   }
 }

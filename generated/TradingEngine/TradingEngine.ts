@@ -57,28 +57,88 @@ export class DecreasePosition__Params {
     this._event = event;
   }
 
-  get key(): Bytes {
+  get marketId(): Bytes {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get size(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+  get account(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get key(): Bytes {
+    return this._event.parameters[2].value.toBytes();
+  }
+
+  get params(): DecreasePositionParamsStruct {
+    return changetype<DecreasePositionParamsStruct>(
+      this._event.parameters[3].value.toTuple()
+    );
+  }
+
+  get result(): DecreasePositionResultStruct {
+    return changetype<DecreasePositionResultStruct>(
+      this._event.parameters[4].value.toTuple()
+    );
+  }
+}
+
+export class DecreasePositionParamsStruct extends ethereum.Tuple {
+  get marketId(): Bytes {
+    return this[0].toBytes();
+  }
+
+  get account(): Address {
+    return this[1].toAddress();
+  }
+
+  get collateralToken(): Address {
+    return this[2].toAddress();
   }
 
   get sizeDelta(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
+    return this[3].toBigInt();
   }
 
-  get collateralReduced(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+  get isLong(): boolean {
+    return this[4].toBoolean();
   }
+}
 
-  get fee(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
+export class DecreasePositionResultStruct extends ethereum.Tuple {
+  get realizedPnl(): BigInt {
+    return this[0].toBigInt();
   }
 
   get reserveDelta(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
+    return this[1].toBigInt();
+  }
+
+  get payoutValue(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get collateralReduced(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get collateralAmountReduced(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get totalFee(): BigInt {
+    return this[5].toBigInt();
+  }
+
+  get fundingPayout(): BigInt {
+    return this[6].toBigInt();
+  }
+
+  get fundingDebt(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get executedPrice(): BigInt {
+    return this[8].toBigInt();
   }
 }
 

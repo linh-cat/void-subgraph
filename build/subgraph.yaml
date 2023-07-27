@@ -6,7 +6,7 @@ dataSources:
     name: TradingEngine
     network: mainnet
     source:
-      address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"
+      address: "0x927b167526bAbB9be047421db732C663a0b77B11"
       abi: TradingEngine
       startBlock: 2
     mapping:
@@ -31,7 +31,8 @@ dataSources:
       eventHandlers:
         - event: ClosePosition(bytes32,uint256,uint256,uint256,uint256)
           handler: handleClosePosition
-        - event: DecreasePosition(bytes32,uint256,uint256,uint256,uint256,uint256)
+        - event: DecreasePosition(indexed bytes32,indexed
+            address,bytes32,(bytes32,address,address,uint256,bool),(int256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))
           handler: handleDecreasePosition
         - event: ExchangeSet(indexed address)
           handler: handleExchangeSet
@@ -53,7 +54,7 @@ dataSources:
     name: Exchange
     network: mainnet
     source:
-      address: "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c"
+      address: "0x96F3Ce39Ad2BfDCf92C0F6E2C2CAbF83874660Fc"
       abi: Exchange
     mapping:
       kind: ethereum/events
