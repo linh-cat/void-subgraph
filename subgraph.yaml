@@ -6,7 +6,7 @@ dataSources:
     name: TradingEngine
     network: mainnet
     source:
-      address: "0x927b167526bAbB9be047421db732C663a0b77B11"
+      address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"
       abi: TradingEngine
       startBlock: 2
     mapping:
@@ -31,17 +31,17 @@ dataSources:
       eventHandlers:
         - event: ClosePosition(bytes32,uint256,uint256,uint256,uint256)
           handler: handleClosePosition
-        - event: DecreasePosition(indexed bytes32,indexed address,bytes32,(bytes32,address,address,uint256,bool),(int256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))
+        - event: DecreasePosition(indexed bytes32,indexed
+            address,bytes32,(bytes32,address,address,uint256,bool),(int256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))
           handler: handleDecreasePosition
         - event: ExchangeSet(indexed address)
           handler: handleExchangeSet
-        # - event: FeeAndFundings(indexed bytes32,indexed bytes32,uin256,uint256,uint256)
-        #   handler: handleFeeUsdCollected
         - event: FundingDebtPaid(indexed bytes32,indexed address,uint256)
           handler: handleFundingDebtPaid
         - event: FundingPayout(indexed bytes32,indexed address,uint256)
           handler: handleFundingPayout
-        - event: IncreasePosition(indexed bytes32,indexed address,bytes32,uint256,uint256,(bytes32,uint256,uint256,uint256,address,address,bool),(uint256,uint256,uint256,uint256))
+        - event: IncreasePosition(indexed bytes32,indexed
+            address,bytes32,uint256,uint256,(bytes32,uint256,uint256,uint256,address,address,bool),(uint256,uint256,uint256,uint256))
           handler: handleIncreasePosition
         - event: MarketCreated(indexed uint8,indexed bytes32,indexed
             address,address,address,bytes32,bool,uint8,uint8)
@@ -54,7 +54,7 @@ dataSources:
     name: Exchange
     network: mainnet
     source:
-      address: "0x96F3Ce39Ad2BfDCf92C0F6E2C2CAbF83874660Fc"
+      address: "0xc6e7DF5E7b4f2A278906862b61205850344D4e7d"
       abi: Exchange
     mapping:
       kind: ethereum/events
@@ -81,3 +81,45 @@ dataSources:
         - event: OrderPlaced(indexed bytes32,indexed uint8,indexed address,uint256)
           handler: handleOrderPlaced
       file: ./src/exchange.ts
+  - kind: ethereum
+    name: MarketFactory
+    network: mainnet
+    source:
+      address: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
+      abi: MarketFactory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - VaultCreated
+      abis:
+        - name: MarketFactory
+          file: ./abis/MarketFactory.json
+      eventHandlers:
+        - event: VaultCreated(indexed address,indexed address)
+          handler: handleVaultCreated
+      file: ./src/market-factory.ts
+templates:
+  - kind: ethereum/contract
+    name: Vault
+    network: mainnet
+    source:
+      abi: Vault
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/vault.ts
+      entities:
+        - Vault
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+      eventHandlers:
+        - event: Deposit(indexed address,uint256)
+          handler: handleDeposit
+        - event: Withdraw(indexed address,uint256)
+          handler: handleWithdraw
+        - event: BalanceUpdated(uint256)
+          handler: handleBalanceUpdated

@@ -1,0 +1,122 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "contract ITradingEngine",
+        "name": "_engine",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "vault",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "name": "VaultCreated",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          { "internalType": "address", "name": "owner", "type": "address" },
+          {
+            "internalType": "address",
+            "name": "indexToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "quoteToken",
+            "type": "address"
+          },
+          { "internalType": "address", "name": "priceFeed", "type": "address" },
+          {
+            "internalType": "contract IFundingRateModel",
+            "name": "fundingRateModel",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct Addresses",
+        "name": "addresses",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          { "internalType": "bytes32", "name": "name", "type": "bytes32" },
+          {
+            "internalType": "uint8[2]",
+            "name": "feeDistributionWeights",
+            "type": "uint8[2]"
+          },
+          {
+            "internalType": "uint8[2]",
+            "name": "maxLongShortSkew",
+            "type": "uint8[2]"
+          },
+          {
+            "internalType": "uint16",
+            "name": "maintenanceMarginBps",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "liquidationFee",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "maxPostionSizeOverVault",
+            "type": "uint16"
+          },
+          { "internalType": "uint16", "name": "openFee", "type": "uint16" },
+          { "internalType": "uint16", "name": "closeFee", "type": "uint16" },
+          {
+            "internalType": "uint32",
+            "name": "fundingInterval",
+            "type": "uint32"
+          },
+          { "internalType": "uint8", "name": "maxLeverage", "type": "uint8" },
+          {
+            "internalType": "uint8",
+            "name": "maxExposureMultiplier",
+            "type": "uint8"
+          },
+          { "internalType": "uint8", "name": "category", "type": "uint8" },
+          {
+            "internalType": "enum MarketType",
+            "name": "marketType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum PriceFeedType",
+            "name": "priceFeedType",
+            "type": "uint8"
+          },
+          { "internalType": "bool", "name": "isGoverned", "type": "bool" }
+        ],
+        "internalType": "struct MarketParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "deployMarket",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

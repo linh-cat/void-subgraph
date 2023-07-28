@@ -182,3 +182,29 @@ type History @entity {
   # close
   collateralReduced: BigInt
 }
+
+type Vault @entity {
+  # vault address
+  id: Bytes!
+  owner: Bytes! # address
+  # amount via deposit
+  liquidity: BigInt!
+  # amount via deposit + increase position
+  balance: BigInt
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+enum VaultAction {
+  DEPOSIT
+  WITHDRAW
+}
+
+type VaultTransaction @entity {
+  id: Bytes!
+  action: VaultAction!
+  amount: BigInt!
+  createdAt: BigInt!
+  transactionHash: Bytes!
+}
