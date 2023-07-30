@@ -1,0 +1,127 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: TradingEngine
+    network: arbitrum-goerli
+    source:
+      address: "0x7Fb7aa1d8F629E141FFd4f94f02eCf612a292e04"
+      abi: TradingEngine
+      startBlock: 32256034
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - ClosePosition
+        - DecreasePosition
+        - ExchangeSet
+        - FeeUsdCollected
+        - FundingDebtPaid
+        - FundingPayout
+        - IncreasePosition
+        - MarketCreated
+        - MarketListed
+        - UpdateIndex
+        - UpdatePosition
+      abis:
+        - name: TradingEngine
+          file: ./abis/TradingEngine.json
+      eventHandlers:
+        - event: ClosePosition(bytes32,uint256,uint256,uint256,uint256)
+          handler: handleClosePosition
+        - event: DecreasePosition(indexed bytes32,indexed
+            address,bytes32,(bytes32,address,address,uint256,bool),(int256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))
+          handler: handleDecreasePosition
+        - event: ExchangeSet(indexed address)
+          handler: handleExchangeSet
+        - event: FundingDebtPaid(indexed bytes32,indexed address,uint256)
+          handler: handleFundingDebtPaid
+        - event: FundingPayout(indexed bytes32,indexed address,uint256)
+          handler: handleFundingPayout
+        - event: IncreasePosition(indexed bytes32,indexed
+            address,bytes32,uint256,uint256,(bytes32,uint256,uint256,uint256,address,address,bool),(uint256,uint256,uint256,uint256))
+          handler: handleIncreasePosition
+        - event: MarketCreated(indexed uint8,indexed bytes32,indexed
+            address,address,address,bytes32,bool,uint8,uint8)
+          handler: handleMarketCreated
+        - event: UpdatePosition(indexed bytes32,indexed
+            address,bytes32,address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleUpdatePosition
+      file: ./src/trading-engine.ts
+  - kind: ethereum
+    name: Exchange
+    network: arbitrum-goerli
+    source:
+      address: "0xbf35cd5Ea35E1b8305CE2CcC3bF9268A291c210C"
+      abi: Exchange
+      startBlock: 32285710
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - CloseMarketOrderPlaced
+        - OpenMarketOrderPlaced
+        - OrderCancelled
+        - OrderExecuted
+        - OrderPlaced
+      abis:
+        - name: Exchange
+          file: ./abis/Exchange.json
+      eventHandlers:
+        - event: CloseMarketOrderPlaced(indexed address)
+          handler: handleCloseMarketOrderPlaced
+        - event: OpenMarketOrderPlaced(indexed address)
+          handler: handleOpenMarketOrderPlaced
+        - event: OrderCancelled(indexed address,indexed uint256)
+          handler: handleOrderCancelled
+        - event: OrderExecuted(indexed address,indexed uint256,indexed address)
+          handler: handleOrderExecuted
+        - event: OrderPlaced(indexed bytes32,indexed uint8,indexed address,uint256)
+          handler: handleOrderPlaced
+      file: ./src/exchange.ts
+  - kind: ethereum
+    name: MarketFactory
+    network: arbitrum-goerli
+    source:
+      address: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
+      abi: MarketFactory
+      startBlock: 32256886
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - VaultCreated
+      abis:
+        - name: MarketFactory
+          file: ./abis/MarketFactory.json
+      eventHandlers:
+        - event: VaultCreated(indexed address,indexed address)
+          handler: handleVaultCreated
+      file: ./src/market-factory.ts
+templates:
+  - kind: ethereum/contract
+    name: Vault
+    network: arbitrum-goerli
+    source:
+      abi: Vault
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/vault.ts
+      entities:
+        - Vault
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+      eventHandlers:
+        - event: Deposit(indexed address,uint256)
+          handler: handleDeposit
+        - event: Withdraw(indexed address,uint256)
+          handler: handleWithdraw
+        - event: BalanceUpdated(uint256)
+          handler: handleBalanceUpdated
