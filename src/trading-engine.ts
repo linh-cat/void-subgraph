@@ -172,6 +172,18 @@ function saveHistoryOnDecrease(event: DecreasePositionEvent): void {
 }
 
 export function handleIncreasePosition(event: IncreasePositionEvent): void {
+  let position = Position.load(event.params.key);
+  if (!position) {
+    position = new Position(event.params.key);
+    position.isLong = event.params.params.isLong;
+    position.market = event.params.marketId;
+    position.account = event.params.account;
+    position.collateralToken = event.params.params.collateralToken;
+    position.key = event.params.key;
+    position.createdAt = event.block.timestamp;
+    position.save();
+  }
+
   saveHistoryOnIncrease(event);
 
   let market = Market.load(event.params.marketId);
@@ -202,20 +214,13 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
 
 export function handleUpdatePosition(event: UpdatePositionEvent): void {
   let position = Position.load(event.params.key);
-
   if (!position) {
-    position = new Position(event.params.key);
-    position.market = event.params.marketId;
-    position.account = event.params.account;
-    position.collateralToken = event.params.collateralToken;
-    position.key = event.params.key;
+    return;
   }
 
-  position.createdAt = event.block.timestamp;
   position.size = event.params.size;
   position.collateralValue = event.params.collateralValue;
   position.entryPrice = event.params.entryPrice;
-
   position.entryFundingIndex = event.params.entryFundingIndex;
   position.entryPayoutIndex = event.params.entryPayoutIndex;
   position.save();
