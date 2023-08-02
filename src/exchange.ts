@@ -92,6 +92,7 @@ export function handleOrderPlaced(event: OrderPlacedEvent): void {
   let entity = new Order(event.params.orderId.toHex());
   entity.market = event.params.marketId;
   entity.orderType = event.params.orderType;
+  entity.open = order.open;
   entity.account = event.params.account;
   entity.orderId = event.params.orderId;
   entity.triggerPrice = order.extra.triggerPrice;

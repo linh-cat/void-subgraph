@@ -154,6 +154,7 @@ type Order @entity {
   blockNumber: BigInt!
   createdAt: BigInt!
   txHash: Bytes!
+  open: Boolean!
 }
 
 enum PositionStatus {
