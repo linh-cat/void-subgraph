@@ -119,6 +119,7 @@ function saveHistoryOnIncrease(event: IncreasePositionEvent): void {
   history.fundingPayout = event.params.result.fundingPayout;
   history.txHash = event.transaction.hash;
   history.sizeDelta = event.params.params.sizeDelta;
+  history.createdAt = event.block.timestamp;
   history.save();
 }
 
@@ -142,6 +143,7 @@ function saveHistoryOnDecrease(event: DecreasePositionEvent): void {
   history.txHash = event.transaction.hash;
   history.sizeDelta = event.params.params.sizeDelta;
   history.collateralReduced = event.params.result.collateralReduced;
+  history.createdAt = event.block.timestamp;
 
   let payoutValue: BigInt = event.params.result.payoutValue;
 

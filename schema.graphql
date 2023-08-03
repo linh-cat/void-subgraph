@@ -180,7 +180,7 @@ type History @entity {
   fundingPayout: BigInt! # usd
   fundingDebt: BigInt! # usd
   txHash: Bytes!
-
+  createdAt: BigInt!
   # close
   collateralReduced: BigInt
 }
