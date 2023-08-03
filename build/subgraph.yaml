@@ -27,7 +27,7 @@ dataSources:
         - UpdatePosition
       abis:
         - name: TradingEngine
-          file: TradingEngine/abis/TradingEngine.json
+          file: TradingEngine\abis\TradingEngine.json
       eventHandlers:
         - event: ClosePosition(bytes32,uint256,uint256,uint256,uint256)
           handler: handleClosePosition
@@ -49,7 +49,7 @@ dataSources:
         - event: UpdatePosition(indexed bytes32,indexed
             address,bytes32,address,uint256,uint256,uint256,uint256,uint256)
           handler: handleUpdatePosition
-      file: TradingEngine/TradingEngine.wasm
+      file: TradingEngine\TradingEngine.wasm
   - kind: ethereum
     name: Exchange
     network: mainnet
@@ -68,7 +68,7 @@ dataSources:
         - OrderPlaced
       abis:
         - name: Exchange
-          file: Exchange/abis/Exchange.json
+          file: Exchange\abis\Exchange.json
       eventHandlers:
         - event: CloseMarketOrderPlaced(indexed address)
           handler: handleCloseMarketOrderPlaced
@@ -80,7 +80,7 @@ dataSources:
           handler: handleOrderExecuted
         - event: OrderPlaced(indexed bytes32,indexed uint8,indexed address,uint256)
           handler: handleOrderPlaced
-      file: Exchange/Exchange.wasm
+      file: Exchange\Exchange.wasm
   - kind: ethereum
     name: MarketFactory
     network: mainnet
@@ -95,11 +95,11 @@ dataSources:
         - VaultCreated
       abis:
         - name: MarketFactory
-          file: MarketFactory/abis/MarketFactory.json
+          file: MarketFactory\abis\MarketFactory.json
       eventHandlers:
         - event: VaultCreated(indexed address,indexed address)
           handler: handleVaultCreated
-      file: MarketFactory/MarketFactory.wasm
+      file: MarketFactory\MarketFactory.wasm
 templates:
   - kind: ethereum/contract
     name: Vault
@@ -110,12 +110,12 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: templates/Vault/Vault.wasm
+      file: templates\Vault\Vault.wasm
       entities:
         - Vault
       abis:
         - name: Vault
-          file: Vault/abis/Vault.json
+          file: Vault\abis\Vault.json
       eventHandlers:
         - event: Deposit(indexed address,uint256)
           handler: handleDeposit
