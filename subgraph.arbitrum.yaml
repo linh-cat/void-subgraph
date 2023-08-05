@@ -6,9 +6,9 @@ dataSources:
     name: TradingEngine
     network: arbitrum-goerli
     source:
-      address: "0x7Fb7aa1d8F629E141FFd4f94f02eCf612a292e04"
+      address: "0xDBFbB400B04a221D1c0A372CA6D6fB131F70A4aa"
       abi: TradingEngine
-      startBlock: 32256034
+      startBlock: 33031410
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -54,9 +54,9 @@ dataSources:
     name: Exchange
     network: arbitrum-goerli
     source:
-      address: "0xbf35cd5Ea35E1b8305CE2CcC3bF9268A291c210C"
+      address: "0x66C814355bEA568e5F93322FbC60E669ed705e69"
       abi: Exchange
-      startBlock: 32285710
+      startBlock: 33035628
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -86,9 +86,9 @@ dataSources:
     name: MarketFactory
     network: arbitrum-goerli
     source:
-      address: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
+      address: "0x49C492b723ad29F3275D3724a6DEA0FB48039d1c"
       abi: MarketFactory
-      startBlock: 32256886
+      startBlock: 33031421
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
