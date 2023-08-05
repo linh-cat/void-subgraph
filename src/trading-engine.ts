@@ -12,11 +12,9 @@ import {
 } from "../generated/TradingEngine/TradingEngine";
 import {
   ClosePosition,
-  DecreasePosition,
   ExchangeSet,
   FundingDebtPaid,
   FundingPayout,
-  IncreasePosition,
   Position,
   Market,
   History,
@@ -41,6 +39,29 @@ export function handleClosePosition(event: ClosePositionEvent): void {
 
 export function handleDecreasePosition(event: DecreasePositionEvent): void {
   saveHistoryOnDecrease(event);
+
+  let position = Position.load(event.params.key);
+  if (!position) {
+    return;
+  }
+
+  let market = Market.load(event.params.marketId);
+
+  if (market) {
+    market.volume = market.volume.plus(event.params.params.sizeDelta);
+
+    if (position.isLong) {
+      market.longOpenInterest = market.longOpenInterest.minus(
+        event.params.params.sizeDelta
+      );
+    } else {
+      market.shortOpenInterest = market.shortOpenInterest.minus(
+        event.params.params.sizeDelta
+      );
+    }
+
+    market.save();
+  }
 }
 
 export function handleExchangeSet(event: ExchangeSetEvent): void {
@@ -192,6 +213,17 @@ export function handleIncreasePosition(event: IncreasePositionEvent): void {
 
   if (market) {
     market.volume = market.volume.plus(event.params.params.sizeDelta);
+
+    if (position.isLong) {
+      market.longOpenInterest = market.longOpenInterest.plus(
+        event.params.params.sizeDelta
+      );
+    } else {
+      market.shortOpenInterest = market.shortOpenInterest.plus(
+        event.params.params.sizeDelta
+      );
+    }
+
     market.save();
   }
 }
@@ -210,6 +242,8 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
   entity.maxLeverage = event.params.maxLeverage;
   entity.name = event.params.name.toString();
   entity.volume = BigInt.fromI32(0);
+  entity.longOpenInterest = BigInt.fromI32(0);
+  entity.shortOpenInterest = BigInt.fromI32(0);
 
   entity.save();
 }

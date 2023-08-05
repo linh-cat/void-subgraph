@@ -85,6 +85,8 @@ type Market @entity {
   maxLeverage: Int!
   transactionHash: Bytes!
   volume: BigInt!
+  longOpenInterest: BigInt!
+  shortOpenInterest: BigInt!
 }
 
 type Position @entity {
