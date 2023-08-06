@@ -10,6 +10,7 @@ import {
   MarketCreated as MarketCreatedEvent,
   UpdatePosition as UpdatePositionEvent,
   UpdateIndex as UpdateIndexEvent,
+  FeeAndFundings as FeeAndFundingEvent,
   TradingEngine,
   TradingEngine__getPrevFundingStateResult,
 } from "../generated/TradingEngine/TradingEngine";
@@ -22,6 +23,7 @@ import {
   Market,
   History,
   FundingHistory,
+  FeeAndFunding,
 } from "../generated/schema";
 
 export function handleClosePosition(event: ClosePositionEvent): void {
@@ -296,5 +298,19 @@ export function handleUpdateIndex(event: UpdateIndexEvent): void {
   entity.longOpenInterest = state.getLongOpenInterest();
   entity.shortOpenInterest = state.getShortOpenInterest();
 
+  entity.save();
+}
+
+export function handleFeeAndFundings(event: FeeAndFundingEvent): void {
+  let entity = new FeeAndFunding(
+    `${event.params.marketId.toHex()}-${event.transaction.hash}`
+  );
+
+  entity.marketId = event.params.marketId;
+  entity.position = event.params.key;
+  entity.fee = event.params.fee;
+  entity.fundingPayout = event.params.fundingPayout;
+  entity.fundingDebt = event.params.fundingDebt;
+  entity.timestamp = event.block.timestamp;
   entity.save();
 }

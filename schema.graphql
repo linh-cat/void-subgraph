@@ -102,6 +102,7 @@ type Position @entity {
   entryPayoutIndex: BigInt
   createdAt: BigInt
   isLong: Boolean! # bool
+  feeAndFundings: [FeeAndFunding!]! @derivedFrom(field: "position")
 }
 
 type CloseMarketOrderPlaced @entity(immutable: true) {
@@ -226,4 +227,14 @@ type FundingHistory @entity {
   fundingRate: BigInt!
   longOpenInterest: BigInt!
   shortOpenInterest: BigInt!
+}
+
+type FeeAndFunding @entity {
+  id: ID!
+  marketId: Bytes!
+  position: Position!
+  fee: BigInt!
+  fundingPayout: BigInt!
+  fundingDebt: BigInt!
+  timestamp: BigInt!
 }

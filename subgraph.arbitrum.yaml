@@ -51,6 +51,8 @@ dataSources:
           handler: handleUpdatePosition
         - event: UpdateIndex(indexed bytes32,uint256,uint256,uint256,uint256,uint256)
           handler: handleUpdateIndex
+        - event: FeeAndFundings(indexed bytes32,indexed bytes32,uint256,uint256,uint256)
+          handler: handleFeeAndFundings
       file: ./src/trading-engine.ts
   - kind: ethereum
     name: Exchange
