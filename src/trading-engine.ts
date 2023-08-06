@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts";
+import { BigInt, ethereum } from "@graphprotocol/graph-ts";
 import {
   ClosePosition as ClosePositionEvent,
   DecreasePosition as DecreasePositionEvent,
@@ -9,6 +9,9 @@ import {
   IncreasePosition as IncreasePositionEvent,
   MarketCreated as MarketCreatedEvent,
   UpdatePosition as UpdatePositionEvent,
+  UpdateIndex as UpdateIndexEvent,
+  TradingEngine,
+  TradingEngine__getPrevFundingStateResult,
 } from "../generated/TradingEngine/TradingEngine";
 import {
   ClosePosition,
@@ -18,6 +21,7 @@ import {
   Position,
   Market,
   History,
+  FundingHistory,
 } from "../generated/schema";
 
 export function handleClosePosition(event: ClosePositionEvent): void {
@@ -260,4 +264,37 @@ export function handleUpdatePosition(event: UpdatePositionEvent): void {
   position.entryFundingIndex = event.params.entryFundingIndex;
   position.entryPayoutIndex = event.params.entryPayoutIndex;
   position.save();
+}
+
+export function getOrNull<T>(result: ethereum.CallResult<T>): T | null {
+  return result.reverted ? null : result.value;
+}
+
+export function handleUpdateIndex(event: UpdateIndexEvent): void {
+  let tradingEngine = TradingEngine.bind(event.address);
+  let state = getOrNull<TradingEngine__getPrevFundingStateResult>(
+    tradingEngine.try_getPrevFundingState(event.params.marketId)
+  );
+
+  if (!state) {
+    throw new Error("state is null");
+  }
+
+  let entity = new FundingHistory(
+    `${event.params.marketId.toHex()}-${event.block.timestamp}`
+  );
+
+  entity.marketId = event.params.marketId;
+  entity.longFundingIndex = event.params.longFunding;
+  entity.shortFundingIndex = event.params.shortFunding;
+  entity.longPayoutIndex = event.params.longPayout;
+  entity.shortPayoutIndex = event.params.shortPayout;
+  entity.nInterval = event.params.nInterval;
+
+  entity.timestamp = state.getTimestamp();
+  entity.fundingRate = state.getFundingRate();
+  entity.longOpenInterest = state.getLongOpenInterest();
+  entity.shortOpenInterest = state.getShortOpenInterest();
+
+  entity.save();
 }

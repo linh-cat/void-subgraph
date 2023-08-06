@@ -212,3 +212,18 @@ type VaultTransaction @entity {
   createdAt: BigInt!
   transactionHash: Bytes!
 }
+
+type FundingHistory @entity {
+  id: ID!
+  marketId: Bytes!
+  longFundingIndex: BigInt!
+  shortFundingIndex: BigInt!
+  longPayoutIndex: BigInt!
+  shortPayoutIndex: BigInt!
+  nInterval: BigInt!
+  timestamp: BigInt!
+
+  fundingRate: BigInt!
+  longOpenInterest: BigInt!
+  shortOpenInterest: BigInt!
+}
