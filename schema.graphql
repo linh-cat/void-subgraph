@@ -83,10 +83,24 @@ type Market @entity {
   category: Int! # uint8
   name: String!
   maxLeverage: Int!
+  maintenanceMarginBps: Int! # uint16
+  maxPostionSizeOverVault: Int
+  liquidationFeeRate: Int!
+  openFeeRate: Int!
+  closeFeeRate: Int!
+  priceFeedType: Int! # uint8
+  priceFeed: Bytes!
+  fundingRateModel: Bytes!
+
   transactionHash: Bytes!
   volume: BigInt!
   longOpenInterest: BigInt!
   shortOpenInterest: BigInt!
+
+  longFundingIndex: BigInt
+  shortFundingIndex: BigInt
+  longPayoutIndex: BigInt
+  shortPayoutIndex: BigInt
 }
 
 type Position @entity {

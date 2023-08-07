@@ -13,6 +13,8 @@ import {
   FeeAndFundings as FeeAndFundingEvent,
   TradingEngine,
   TradingEngine__getPrevFundingStateResult,
+  TradingEngine__marketParamsResult,
+  TradingEngine__marketAddressesResult,
 } from "../generated/TradingEngine/TradingEngine";
 import {
   ClosePosition,
@@ -236,6 +238,20 @@ export function handleIncreasePosition(event: IncreasePositionEvent): void {
 
 export function handleMarketCreated(event: MarketCreatedEvent): void {
   let entity = Market.load(event.params.marketId);
+  let tradingEngineContract = TradingEngine.bind(event.address);
+
+  let marketParams = getOrNull<TradingEngine__marketParamsResult>(
+    tradingEngineContract.try_marketParams(event.params.marketId)
+  );
+
+  let marketAddresses = getOrNull<TradingEngine__marketAddressesResult>(
+    tradingEngineContract.try_marketAddresses(event.params.marketId)
+  );
+
+  if (!marketParams || !marketAddresses) {
+    throw new Error("marketParams is null");
+  }
+
   entity = new Market(event.params.marketId);
   entity.marketType = event.params.marketType;
   entity.marketId = event.params.marketId;
@@ -247,6 +263,15 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
   entity.category = event.params.category;
   entity.maxLeverage = event.params.maxLeverage;
   entity.name = event.params.name.toString();
+
+  entity.maintenanceMarginBps = marketParams.getMaintenanceMarginBps();
+  entity.liquidationFeeRate = marketParams.getLiquidationFee();
+  entity.openFeeRate = marketParams.getOpenFee();
+  entity.closeFeeRate = marketParams.getCloseFee();
+  entity.priceFeedType = marketParams.getPriceFeedType();
+  entity.priceFeed = marketAddresses.getPriceFeed();
+  entity.fundingRateModel = marketAddresses.getFundingRateModel();
+
   entity.volume = BigInt.fromI32(0);
   entity.longOpenInterest = BigInt.fromI32(0);
   entity.shortOpenInterest = BigInt.fromI32(0);
@@ -297,6 +322,16 @@ export function handleUpdateIndex(event: UpdateIndexEvent): void {
   entity.fundingRate = state.getFundingRate();
   entity.longOpenInterest = state.getLongOpenInterest();
   entity.shortOpenInterest = state.getShortOpenInterest();
+
+  let market = Market.load(event.params.marketId);
+
+  if (market) {
+    market.longFundingIndex = event.params.longFunding;
+    market.shortFundingIndex = event.params.shortFunding;
+    market.longPayoutIndex = event.params.longPayout;
+    market.shortPayoutIndex = event.params.shortPayout;
+    market.save();
+  }
 
   entity.save();
 }
