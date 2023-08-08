@@ -338,7 +338,7 @@ export function handleUpdateIndex(event: UpdateIndexEvent): void {
 
 export function handleFeeAndFundings(event: FeeAndFundingEvent): void {
   let entity = new FeeAndFunding(
-    `${event.params.marketId.toHex()}-${event.transaction.hash}`
+    `${event.params.marketId.toHex()}-${event.transaction.hash.toHex()}`
   );
 
   entity.marketId = event.params.marketId;

@@ -6,9 +6,9 @@ dataSources:
     name: TradingEngine
     network: arbitrum-goerli
     source:
-      address: "0xDBFbB400B04a221D1c0A372CA6D6fB131F70A4aa"
+      address: "0x34eEE225285C5DE122bE507C38Dc24e0C6276E45"
       abi: TradingEngine
-      startBlock: 33031410
+      startBlock: 33415114
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -41,7 +41,7 @@ dataSources:
         - event: FundingPayout(indexed bytes32,indexed address,uint256)
           handler: handleFundingPayout
         - event: IncreasePosition(indexed bytes32,indexed
-            address,bytes32,uint256,uint256,(bytes32,uint256,uint256,uint256,address,address,bool),(uint256,uint256,uint256,uint256))
+            address,bytes32,uint256,uint256,(bytes32,uint256,uint256,uint256,address,address,bool),(uint256,uint256,uint256))
           handler: handleIncreasePosition
         - event: MarketCreated(indexed uint8,indexed bytes32,indexed
             address,address,address,bytes32,bool,uint8,uint8)
@@ -58,9 +58,9 @@ dataSources:
     name: Exchange
     network: arbitrum-goerli
     source:
-      address: "0x66C814355bEA568e5F93322FbC60E669ed705e69"
+      address: "0x065719e5673Dbe2Bf56BBA2a339E23726d3C7E7D"
       abi: Exchange
-      startBlock: 33035628
+      startBlock: 33415129
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -90,9 +90,9 @@ dataSources:
     name: MarketFactory
     network: arbitrum-goerli
     source:
-      address: "0x49C492b723ad29F3275D3724a6DEA0FB48039d1c"
+      address: "0x1d3ca4d88bfd110e983D096fA0fb948263B807f5"
       abi: MarketFactory
-      startBlock: 33031421
+      startBlock: 33415117
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

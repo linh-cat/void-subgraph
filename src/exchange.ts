@@ -61,6 +61,12 @@ export function handleOrderCancelled(event: OrderCancelledEvent): void {
 }
 
 export function handleOrderExecuted(event: OrderExecutedEvent): void {
+  let order = Order.load(event.params.orderId.toString());
+  if (order) {
+    order.executed = true;
+    order.save();
+  }
+
   let entity = new OrderExecuted(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
@@ -89,7 +95,7 @@ export function handleOrderPlaced(event: OrderPlacedEvent): void {
     throw new Error("order not found");
   }
 
-  let entity = new Order(event.params.orderId.toHex());
+  let entity = new Order(event.params.orderId.toString());
   entity.market = event.params.marketId;
   entity.orderType = event.params.orderType;
   entity.open = order.open;

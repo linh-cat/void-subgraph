@@ -41,7 +41,7 @@ dataSources:
         - event: FundingPayout(indexed bytes32,indexed address,uint256)
           handler: handleFundingPayout
         - event: IncreasePosition(indexed bytes32,indexed
-            address,bytes32,uint256,uint256,(bytes32,uint256,uint256,uint256,address,address,bool),(uint256,uint256,uint256,uint256))
+            address,bytes32,uint256,uint256,(bytes32,uint256,uint256,uint256,address,address,bool),(uint256,uint256,uint256))
           handler: handleIncreasePosition
         - event: MarketCreated(indexed uint8,indexed bytes32,indexed
             address,address,address,bytes32,bool,uint8,uint8)
