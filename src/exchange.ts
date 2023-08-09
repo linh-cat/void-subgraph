@@ -102,6 +102,7 @@ export function handleOrderPlaced(event: OrderPlacedEvent): void {
   entity.account = event.params.account;
   entity.orderId = event.params.orderId;
   entity.triggerPrice = order.extra.triggerPrice;
+  entity.sizeDelta = order.sizeDelta;
   entity.tpPrice = order.extra.tpPrice;
   entity.slPrice = order.extra.slPrice;
   entity.isLong = order.isLong;

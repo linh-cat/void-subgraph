@@ -161,6 +161,7 @@ type Order @entity {
   account: Bytes! # address
   orderId: BigInt! # uint256
   triggerPrice: BigInt!
+  sizeDelta: BigInt!
   tpPrice: BigInt!
   slPrice: BigInt!
   isLong: Boolean! # bool
