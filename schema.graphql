@@ -232,7 +232,7 @@ type VaultTransaction @entity {
 
 type FundingHistory @entity {
   id: ID!
-  marketId: Bytes!
+  market: Market
   longFundingIndex: BigInt!
   shortFundingIndex: BigInt!
   longPayoutIndex: BigInt!

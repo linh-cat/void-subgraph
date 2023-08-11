@@ -324,7 +324,7 @@ export function handleUpdateIndex(event: UpdateIndexEvent): void {
     `${event.params.marketId.toHex()}-${event.block.timestamp}`
   );
 
-  entity.marketId = event.params.marketId;
+  entity.market = event.params.marketId;
   entity.longFundingIndex = event.params.longFunding;
   entity.shortFundingIndex = event.params.shortFunding;
   entity.longPayoutIndex = event.params.longPayout;
