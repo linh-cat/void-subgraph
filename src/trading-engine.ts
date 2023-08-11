@@ -42,6 +42,12 @@ export function handleClosePosition(event: ClosePositionEvent): void {
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
+  let position = Position.load(event.params.key);
+  if (position) {
+    position.closed = true;
+    position.save();
+  }
+
   entity.save();
 }
 
@@ -206,14 +212,16 @@ export function handleIncreasePosition(event: IncreasePositionEvent): void {
   let position = Position.load(event.params.key);
   if (!position) {
     position = new Position(event.params.key);
-    position.isLong = event.params.params.isLong;
-    position.market = event.params.marketId;
-    position.account = event.params.account;
-    position.collateralToken = event.params.params.collateralToken;
-    position.key = event.params.key;
-    position.createdAt = event.block.timestamp;
-    position.save();
   }
+
+  position.isLong = event.params.params.isLong;
+  position.market = event.params.marketId;
+  position.account = event.params.account;
+  position.collateralToken = event.params.params.collateralToken;
+  position.key = event.params.key;
+  position.createdAt = event.block.timestamp;
+  position.closed = false;
+  position.save();
 
   saveHistoryOnIncrease(event);
 

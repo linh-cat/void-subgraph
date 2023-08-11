@@ -117,6 +117,7 @@ type Position @entity {
   createdAt: BigInt
   isLong: Boolean! # bool
   feeAndFundings: [FeeAndFunding!]! @derivedFrom(field: "position")
+  closed: Boolean!
 }
 
 type CloseMarketOrderPlaced @entity(immutable: true) {
