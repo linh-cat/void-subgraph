@@ -202,10 +202,7 @@ function saveHistoryOnDecrease(event: DecreasePositionEvent): void {
       history.pnl = pnl;
     }
   } else {
-    history.pnl =
-      payoutValue < event.params.result.collateralReduced
-        ? BigInt.zero()
-        : payoutValue.minus(event.params.result.collateralReduced);
+    history.pnl = payoutValue.minus(event.params.result.collateralReduced);
   }
 
   history.save();
