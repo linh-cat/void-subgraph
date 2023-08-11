@@ -16,6 +16,9 @@ import {
   TradingEngine__marketParamsResult,
   TradingEngine__marketAddressesResult,
 } from "../generated/TradingEngine/TradingEngine";
+
+import { FundingRateModel } from "../generated/TradingEngine/FundingRateModel";
+
 import {
   ClosePosition,
   ExchangeSet,
@@ -260,6 +263,10 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
     throw new Error("marketParams is null");
   }
 
+  let fundingRateModel = FundingRateModel.bind(
+    marketAddresses.getFundingRateModel()
+  );
+
   entity = new Market(event.params.marketId);
   entity.marketType = event.params.marketType;
   entity.marketId = event.params.marketId;
@@ -283,6 +290,7 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
   entity.volume = BigInt.fromI32(0);
   entity.longOpenInterest = BigInt.fromI32(0);
   entity.shortOpenInterest = BigInt.fromI32(0);
+  entity.fundingRatePrecision = fundingRateModel.getFundingRatePrecision();
 
   entity.save();
 }

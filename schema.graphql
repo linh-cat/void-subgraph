@@ -91,7 +91,7 @@ type Market @entity {
   priceFeedType: Int! # uint8
   priceFeed: Bytes!
   fundingRateModel: Bytes!
-
+  fundingRatePrecision: BigInt!
   transactionHash: Bytes!
   volume: BigInt!
   longOpenInterest: BigInt!

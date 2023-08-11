@@ -28,6 +28,8 @@ dataSources:
       abis:
         - name: TradingEngine
           file: ./abis/TradingEngine.json
+        - name: FundingRateModel
+          file: ./abis/FundingRateModel.json
       eventHandlers:
         - event: ClosePosition(bytes32,uint256,uint256,uint256,uint256)
           handler: handleClosePosition
