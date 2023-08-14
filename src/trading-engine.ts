@@ -12,7 +12,8 @@ import {
   UpdateIndex as UpdateIndexEvent,
   FeeAndFundings as FeeAndFundingEvent,
   TradingEngine,
-  TradingEngine__getPrevFundingStateResult,
+  SetMarketListed as SetMarketListedEvent,
+  TradingEngine__prevFundingStatesResult,
   TradingEngine__marketParamsResult,
   TradingEngine__marketAddressesResult,
 } from "../generated/TradingEngine/TradingEngine";
@@ -275,6 +276,7 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
   entity.category = event.params.category;
   entity.maxLeverage = event.params.maxLeverage;
   entity.name = event.params.name.toString();
+  entity.delisted = false;
 
   entity.maintenanceMarginBps = marketParams.getMaintenanceMarginBps();
   entity.liquidationFeeRate = marketParams.getLiquidationFee();
@@ -312,8 +314,8 @@ export function getOrNull<T>(result: ethereum.CallResult<T>): T | null {
 
 export function handleUpdateIndex(event: UpdateIndexEvent): void {
   let tradingEngine = TradingEngine.bind(event.address);
-  let state = getOrNull<TradingEngine__getPrevFundingStateResult>(
-    tradingEngine.try_getPrevFundingState(event.params.marketId)
+  let state = getOrNull<TradingEngine__prevFundingStatesResult>(
+    tradingEngine.try_prevFundingStates(event.params.marketId)
   );
 
   if (!state) {
@@ -361,4 +363,17 @@ export function handleFeeAndFundings(event: FeeAndFundingEvent): void {
   entity.fundingDebt = event.params.fundingDebt;
   entity.timestamp = event.block.timestamp;
   entity.save();
+}
+
+export function handleSetMarketListed(event: SetMarketListedEvent): void {
+  let market = Market.load(event.params.marketId);
+
+  if (market) {
+    if (!event.params.isListed) {
+      market.delisted = true;
+    } else {
+      market.delisted = false;
+    }
+    market.save();
+  }
 }

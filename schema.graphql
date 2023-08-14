@@ -101,6 +101,7 @@ type Market @entity {
   shortFundingIndex: BigInt
   longPayoutIndex: BigInt
   shortPayoutIndex: BigInt
+  delisted: Boolean!
 }
 
 type Position @entity {

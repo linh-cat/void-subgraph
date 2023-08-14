@@ -6,9 +6,9 @@ dataSources:
     name: TradingEngine
     network: arbitrum-goerli
     source:
-      address: "0x34eEE225285C5DE122bE507C38Dc24e0C6276E45"
+      address: "0x50EaB5dc93C09beb560d1DD12f3559d465762348"
       abi: TradingEngine
-      startBlock: 33415114
+      startBlock: 34291704
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -33,7 +33,8 @@ dataSources:
       eventHandlers:
         - event: ClosePosition(bytes32,uint256,uint256,uint256,uint256)
           handler: handleClosePosition
-        - event: DecreasePosition(indexed bytes32,indexed
+        - event: >-
+            DecreasePosition(indexed bytes32,indexed
             address,bytes32,(bytes32,address,address,uint256,bool),(int256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))
           handler: handleDecreasePosition
         - event: ExchangeSet(indexed address)
@@ -42,27 +43,34 @@ dataSources:
           handler: handleFundingDebtPaid
         - event: FundingPayout(indexed bytes32,indexed address,uint256)
           handler: handleFundingPayout
-        - event: IncreasePosition(indexed bytes32,indexed
+        - event: >-
+            IncreasePosition(indexed bytes32,indexed
             address,bytes32,uint256,uint256,(bytes32,uint256,uint256,uint256,address,address,bool),(uint256,uint256,uint256))
           handler: handleIncreasePosition
-        - event: MarketCreated(indexed uint8,indexed bytes32,indexed
+        - event: >-
+            MarketCreated(indexed uint8,indexed bytes32,indexed
             address,address,address,bytes32,bool,uint8,uint8)
           handler: handleMarketCreated
-        - event: UpdatePosition(indexed bytes32,indexed
+        - event: >-
+            UpdatePosition(indexed bytes32,indexed
             address,bytes32,address,uint256,uint256,uint256,uint256,uint256)
           handler: handleUpdatePosition
         - event: UpdateIndex(indexed bytes32,uint256,uint256,uint256,uint256,uint256)
           handler: handleUpdateIndex
-        - event: FeeAndFundings(indexed bytes32,indexed bytes32,uint256,uint256,uint256)
+        - event: >-
+            FeeAndFundings(indexed bytes32,indexed
+            bytes32,uint256,uint256,uint256)
           handler: handleFeeAndFundings
+        - event: SetMarketListed(indexed bytes32,bool)
+          handler: handleSetMarketListed
       file: ./src/trading-engine.ts
   - kind: ethereum
     name: Exchange
     network: arbitrum-goerli
     source:
-      address: "0x065719e5673Dbe2Bf56BBA2a339E23726d3C7E7D"
+      address: "0x337F450C12EB7D038c64727C678289B5C6B9260d"
       abi: Exchange
-      startBlock: 33415129
+      startBlock: 34293320
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -92,9 +100,9 @@ dataSources:
     name: MarketFactory
     network: arbitrum-goerli
     source:
-      address: "0x1d3ca4d88bfd110e983D096fA0fb948263B807f5"
+      address: "0xC015658b4d22891e7a30C9d0A5ef10d0703e7d00"
       abi: MarketFactory
-      startBlock: 33415117
+      startBlock: 34291718
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
