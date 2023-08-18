@@ -115,7 +115,8 @@ type Position @entity {
   entryPrice: BigInt
   entryFundingIndex: BigInt
   entryPayoutIndex: BigInt
-  createdAt: BigInt
+  createdAt: BigInt!
+  updatedAt: BigInt
   isLong: Boolean! # bool
   feeAndFundings: [FeeAndFunding!]! @derivedFrom(field: "position")
   closed: Boolean!

@@ -49,6 +49,8 @@ export function handleClosePosition(event: ClosePositionEvent): void {
   let position = Position.load(event.params.key);
   if (position) {
     position.closed = true;
+    position.createdAt = BigInt.zero();
+    position.updatedAt = event.block.timestamp;
     position.save();
   }
 
@@ -213,6 +215,11 @@ export function handleIncreasePosition(event: IncreasePositionEvent): void {
   let position = Position.load(event.params.key);
   if (!position) {
     position = new Position(event.params.key);
+    position.createdAt = BigInt.zero();
+  }
+
+  if (position.createdAt == BigInt.zero()) {
+    position.createdAt = event.block.timestamp;
   }
 
   position.isLong = event.params.params.isLong;
@@ -220,7 +227,6 @@ export function handleIncreasePosition(event: IncreasePositionEvent): void {
   position.account = event.params.account;
   position.collateralToken = event.params.params.collateralToken;
   position.key = event.params.key;
-  position.createdAt = event.block.timestamp;
   position.closed = false;
   position.save();
 
@@ -296,10 +302,11 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
 
 export function handleUpdatePosition(event: UpdatePositionEvent): void {
   let position = Position.load(event.params.key);
-  if (!position) {
+  if (position == null) {
     return;
   }
 
+  position.updatedAt = event.block.timestamp;
   position.size = event.params.size;
   position.collateralValue = event.params.collateralValue;
   position.entryPrice = event.params.entryPrice;
