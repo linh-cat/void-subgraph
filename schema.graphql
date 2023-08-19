@@ -138,15 +138,6 @@ type OpenMarketOrderPlaced @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type OrderCancelled @entity(immutable: true) {
-  id: Bytes!
-  account: Bytes! # address
-  orderId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
 type OrderExecuted @entity(immutable: true) {
   id: Bytes!
   account: Bytes! # address

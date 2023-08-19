@@ -47,17 +47,11 @@ export function handleOpenMarketOrderPlaced(
 }
 
 export function handleOrderCancelled(event: OrderCancelledEvent): void {
-  let entity = new OrderCancelled(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.account = event.params.account;
-  entity.orderId = event.params.orderId;
-
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-
-  entity.save();
+  let order = Order.load(event.params.orderId.toString());
+  if (order) {
+    order.cancelled = true;
+    order.save();
+  }
 }
 
 export function handleOrderExecuted(event: OrderExecutedEvent): void {
